@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Button,
+  Text,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -15,8 +17,65 @@ import { useNavigation, RouteProp } from "@react-navigation/native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Auth, API, graphqlOperation, Hub } from "aws-amplify";
+import { listUsers, getUser } from "./queries";
+import { gql, useQuery, useMutation } from "@apollo/client";
+import { HubCallback } from "@aws-amplify/core";
+import ModalChangeName from "./ModalChangeName";
+import { updateUser } from "./queries";
+import { FontAwesome } from "@expo/vector-icons";
+import OnLoading from "../../components/OnLoading/OnLoading";
+import OnError from "../../components/OnError/OnError";
 const Home = ({ route }) => {
+  /* =====================================getCOGNITO USER=============== */
+  const [user, setUser] = useState();
+  const userId = user?.attributes.sub;
+  const checkUser = async () => {
+    try {
+      const authUser = await Auth.currentAuthenticatedUser({
+        bypassCache: true,
+      });
+      setUser(authUser);
+    } catch (e) {
+      setUser(null);
+    }
+  };
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    const listener = (data) => {
+      const { event } = data.payload;
+      if (event == "signOut") {
+        setUser(null);
+      }
+      if (event == "signIn") {
+        checkUser();
+      }
+    };
+    Hub.listen("auth", listener);
+    return () => Hub.remove("auth", listener);
+  }, []);
+
+  /* ============================QUERIES========================== */
+  const { loading, error, data } = useQuery(listUsers);
+
+  const {
+    loading: load,
+    error: err,
+    data: dta,
+  } = useQuery(getUser, { variables: { id: userId } });
+
+  const [doUpdateUser, { data: upData, loading: loadMut, error: errorMut }] =
+    useMutation(updateUser);
+
+  const submiting = (id, name, version) => {
+    doUpdateUser({
+      variables: { input: { id: id, name: name, _version: version } },
+    });
+  };
+  /* =========================================================== */
   const navigation = useNavigation();
   const nota = route.params?.nota;
   const title = route.params?.title;
@@ -26,18 +85,41 @@ const Home = ({ route }) => {
   const [image, setimage] = useState(true);
   const [values, setvalues] = useState([]);
   const [search, setsearch] = useState([]);
+  const [modal, setmodal] = useState(false);
+
   const updated = {
     title,
     nota,
     key: Math.random().toString(),
   };
-  useEffect(() => {
+
+  const [switcher, setswitcher] = useState(false);
+  const switcho = (val) => {
+    setswitcher(!val);
+  };
+  /*  const saveData = async () => {
+    await AsyncStorage.setItem("notas", JSON.stringify(values));
+    await AsyncStorage.setItem("search", JSON.stringify(search));
+  };
+  const loadData = async () => {
+    const loadNotes = JSON.parse(await AsyncStorage.getItem("notas"));
+    if (loadNotes) {
+      setvalues(loadNotes);
+    }
+    const LoadSearch = JSON.parse(await AsyncStorage.getItem("search"));
+
+    if (LoadSearch) {
+      setsearch(LoadSearch);
+    }
+  }; */
+
+  /* useEffect(() => {
     loadData();
   }, []);
 
   useEffect(() => {
     saveData();
-  }, [values, search]);
+  }, [values, search]); */
 
   useEffect(() => {
     if (nota || title) {
@@ -47,7 +129,6 @@ const Home = ({ route }) => {
         key = null;
       } else {
         setvalues((prev) => [...prev, updated]);
-        setimage(false);
         setsearch((prev) => [...prev, updated]);
       }
     }
@@ -96,25 +177,42 @@ const Home = ({ route }) => {
       </View>
     );
   };
+  /* ================================================================= */
+  if (loading || loadMut || load) {
+    return <OnLoading />;
+  }
 
-  const saveData = async () => {
-    await AsyncStorage.setItem("notas", JSON.stringify(values));
-    await AsyncStorage.setItem("search", JSON.stringify(search));
-  };
-  const loadData = async () => {
-    const loadNotes = JSON.parse(await AsyncStorage.getItem("notas"));
-    if (loadNotes) {
-      setvalues(loadNotes);
-    }
-    const LoadSearch = JSON.parse(await AsyncStorage.getItem("search"));
+  if (error || errorMut || err) {
+    return (
+      <OnError error={error?.message || errorMut?.message || err?.message} />
+    );
+  }
 
-    if (LoadSearch) {
-      setsearch(LoadSearch);
-    }
-  };
-
+  /* ========================================================RETURN====================================== */
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "flex-start",
+          width: "100%",
+        }}
+      >
+        <Text style={styles.boss}>Hi! {dta?.getUser.name}</Text>
+        <TouchableOpacity onPress={() => setswitcher(!switcher)}>
+          <Text style={{ marginTop: 18 }}>
+            <AntDesign name="edit" size={30} color="maroon" />
+          </Text>
+        </TouchableOpacity>
+        <ModalChangeName
+          modal={modal}
+          submiting={submiting}
+          data={dta}
+          switcho={switcho}
+          switcher={switcher}
+        />
+      </View>
+
       <FlatList
         data={values}
         renderItem={({ item, index }) => (
@@ -142,9 +240,11 @@ const Home = ({ route }) => {
       <TouchableOpacity
         style={styles.plus}
         onPress={() => navigation.navigate("Redactor")}
-        x
       >
         <AntDesign name="pluscircle" size={55} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.signOut} onPress={() => Auth.signOut()}>
+        <FontAwesome name="sign-out" size={30} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -158,7 +258,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: StatusBar.currentHeight,
-    backgroundColor: "#3F45D8",
+    backgroundColor: "#9c58e7",
     paddingTop: 20,
   },
   imageBG: {
@@ -169,7 +269,27 @@ const styles = StyleSheet.create({
   },
   plus: {
     position: "absolute",
-    bottom: 70,
+    bottom: 50,
     right: 30,
+    borderWidth: 5,
+    borderRadius: 38,
+    borderColor: "black",
+  },
+  signOut: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+  },
+  boss: {
+    color: "black",
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "monospace",
+    paddingVertical: 15,
+    marginLeft: 25,
+    textShadowColor: "#1f07f5",
+    textShadowOffset: { width: 5, height: 5 },
+    textShadowRadius: 10,
   },
 });

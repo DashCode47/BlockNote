@@ -1,0 +1,25 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "BlockNote",
+  "functionName": "BlockNotePostConfirmation",
+  "resourceName": "BlockNotePostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "C:\\snapshot\\repo\\build\\node_modules\\@aws-amplify\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "triggerEventPath": "PostConfirmation.event.json",
+  "roleName": "BlockNotePostConfirmation",
+  "skipEdit": true,
+  "enableCors": false,
+  "permissions": {
+    "api": {
+      "BlockNote": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  }
+}

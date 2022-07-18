@@ -1,0 +1,27 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-blocknote-staging-82915-authRole",
+      "UnauthRoleArn": "arn:aws:iam::566870465264:role/amplify-blocknote-staging-82915-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::566870465264:role/amplify-blocknote-staging-82915-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-blocknote-staging-82915-deployment",
+      "UnauthRoleName": "amplify-blocknote-staging-82915-unauthRole",
+      "StackName": "amplify-blocknote-staging-82915",
+      "StackId": "arn:aws:cloudformation:us-east-1:566870465264:stack/amplify-blocknote-staging-82915/e17328c0-0285-11ed-8038-12a190690cbf",
+      "AmplifyAppId": "d1rj56oa3vlrwa",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-blocknote-staging-82915-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "BlockNote": {}
+      },
+      "function": {
+        "BlockNotePostConfirmation": {
+          "deploymentBucketName": "amplify-blocknote-staging-82915-deployment",
+          "s3Key": "amplify-builds/BlockNotePostConfirmation-326f56622b6739717036-build.zip"
+        }
+      }
+    }
+  }
+}

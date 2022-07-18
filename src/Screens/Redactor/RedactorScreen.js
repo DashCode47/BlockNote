@@ -13,13 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 const RedactorScreen = ({ route }) => {
   const [nota, setnota] = useState(route.params?.item.nota);
   const [title, settitle] = useState(route.params?.item.title);
-  const redacTitle = route.params?.item.title;
-  const redacNote = route.params?.item.nota;
+
   const key = route.params?.item.key;
-  const comp = {
-    title: null,
-    nota: null,
-  };
   const navigation = useNavigation();
 
   return (

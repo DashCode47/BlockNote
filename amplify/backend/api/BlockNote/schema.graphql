@@ -1,0 +1,21 @@
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  username: String
+  Notas: [Notas] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Notas @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  titulo: String
+  subtitulo: String
+  userID: ID! @index(name: "byUser")
+  User: User @belongsTo
+}
+
+type Note @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String
+  subtitle: String
+}
+ 
