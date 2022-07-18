@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const Note = ({ item }) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Redactor", { item })}>
+    <TouchableOpacity onPress={() => navigation.push("Redactor", { item })}>
       <LinearGradient
         style={styles.container}
         colors={["#257a7d", "#FFFFFF"]}

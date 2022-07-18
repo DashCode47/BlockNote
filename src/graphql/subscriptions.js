@@ -1,67 +1,13 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateNote = /* GraphQL */ `
-  subscription OnCreateNote {
-    onCreateNote {
-      id
-      title
-      subtitle
-      Users {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const onUpdateNote = /* GraphQL */ `
-  subscription OnUpdateNote {
-    onUpdateNote {
-      id
-      title
-      subtitle
-      Users {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const onDeleteNote = /* GraphQL */ `
-  subscription OnDeleteNote {
-    onDeleteNote {
-      id
-      title
-      subtitle
-      Users {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
       id
       name
       username
-      notes {
+      Notas {
         nextToken
         startedAt
       }
@@ -79,7 +25,7 @@ export const onUpdateUser = /* GraphQL */ `
       id
       name
       username
-      notes {
+      Notas {
         nextToken
         startedAt
       }
@@ -97,7 +43,7 @@ export const onDeleteUser = /* GraphQL */ `
       id
       name
       username
-      notes {
+      Notas {
         nextToken
         startedAt
       }
@@ -109,23 +55,14 @@ export const onDeleteUser = /* GraphQL */ `
     }
   }
 `;
-export const onCreateNoteUser = /* GraphQL */ `
-  subscription OnCreateNoteUser {
-    onCreateNoteUser {
+export const onCreateNotas = /* GraphQL */ `
+  subscription OnCreateNotas {
+    onCreateNotas {
       id
-      noteID
+      titulo
+      subtitulo
       userID
-      note {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
+      User {
         id
         name
         username
@@ -143,23 +80,14 @@ export const onCreateNoteUser = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateNoteUser = /* GraphQL */ `
-  subscription OnUpdateNoteUser {
-    onUpdateNoteUser {
+export const onUpdateNotas = /* GraphQL */ `
+  subscription OnUpdateNotas {
+    onUpdateNotas {
       id
-      noteID
+      titulo
+      subtitulo
       userID
-      note {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
+      User {
         id
         name
         username
@@ -177,23 +105,14 @@ export const onUpdateNoteUser = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteNoteUser = /* GraphQL */ `
-  subscription OnDeleteNoteUser {
-    onDeleteNoteUser {
+export const onDeleteNotas = /* GraphQL */ `
+  subscription OnDeleteNotas {
+    onDeleteNotas {
       id
-      noteID
+      titulo
+      subtitulo
       userID
-      note {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
+      User {
         id
         name
         username
@@ -203,6 +122,48 @@ export const onDeleteNoteUser = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateNote = /* GraphQL */ `
+  subscription OnCreateNote {
+    onCreateNote {
+      id
+      title
+      subtitle
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateNote = /* GraphQL */ `
+  subscription OnUpdateNote {
+    onUpdateNote {
+      id
+      title
+      subtitle
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteNote = /* GraphQL */ `
+  subscription OnDeleteNote {
+    onDeleteNote {
+      id
+      title
+      subtitle
       createdAt
       updatedAt
       _version

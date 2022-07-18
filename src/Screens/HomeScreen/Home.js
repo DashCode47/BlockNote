@@ -9,26 +9,28 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Note from "../../components/Note/Note";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation, RouteProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Auth, API, graphqlOperation, Hub } from "aws-amplify";
+import { Auth, Hub } from "aws-amplify";
 import { listUsers, getUser } from "./queries";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { HubCallback } from "@aws-amplify/core";
 import ModalChangeName from "./ModalChangeName";
 import { updateUser } from "./queries";
 import { FontAwesome } from "@expo/vector-icons";
 import OnLoading from "../../components/OnLoading/OnLoading";
 import OnError from "../../components/OnError/OnError";
+import { MyContext } from "../../Context/Context";
+
 const Home = ({ route }) => {
+  const { userId } = useContext(MyContext);
   /* =====================================getCOGNITO USER=============== */
-  const [user, setUser] = useState();
+  /* const [user, setUser] = useState();
   const userId = user?.attributes.sub;
   const checkUser = async () => {
     try {
@@ -56,7 +58,7 @@ const Home = ({ route }) => {
     };
     Hub.listen("auth", listener);
     return () => Hub.remove("auth", listener);
-  }, []);
+  }, []); */
 
   /* ============================QUERIES========================== */
   const { loading, error, data } = useQuery(listUsers);
@@ -237,6 +239,7 @@ const Home = ({ route }) => {
           source={require("../../../assets/images/alone.png")}
         />
       )}
+      <Text>{userId}</Text>
       <TouchableOpacity
         style={styles.plus}
         onPress={() => navigation.navigate("Redactor")}

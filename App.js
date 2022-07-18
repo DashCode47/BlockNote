@@ -7,20 +7,23 @@ import awsconfig from "./src/aws-exports";
 Amplify.configure(awsconfig);
 import { withAuthenticator } from "aws-amplify-react-native";
 import Client from "./src/apollo/Client";
+import ContextProvider from "./src/Context/Context";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <Client>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Redactor" component={RedactorScreen} />
-        </Stack.Navigator>
+        <ContextProvider>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Redactor" component={RedactorScreen} />
+          </Stack.Navigator>
+        </ContextProvider>
       </NavigationContainer>
     </Client>
   );

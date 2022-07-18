@@ -1,81 +1,13 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getNote = /* GraphQL */ `
-  query GetNote($id: ID!) {
-    getNote(id: $id) {
-      id
-      title
-      subtitle
-      Users {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const listNotes = /* GraphQL */ `
-  query ListNotes(
-    $filter: ModelNoteFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncNotes = /* GraphQL */ `
-  query SyncNotes(
-    $filter: ModelNoteFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncNotes(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
       name
       username
-      notes {
+      Notas {
         nextToken
         startedAt
       }
@@ -137,23 +69,14 @@ export const syncUsers = /* GraphQL */ `
     }
   }
 `;
-export const getNoteUser = /* GraphQL */ `
-  query GetNoteUser($id: ID!) {
-    getNoteUser(id: $id) {
+export const getNotas = /* GraphQL */ `
+  query GetNotas($id: ID!) {
+    getNotas(id: $id) {
       id
-      noteID
+      titulo
+      subtitulo
       userID
-      note {
-        id
-        title
-        subtitle
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
+      User {
         id
         name
         username
@@ -171,16 +94,17 @@ export const getNoteUser = /* GraphQL */ `
     }
   }
 `;
-export const listNoteUsers = /* GraphQL */ `
-  query ListNoteUsers(
-    $filter: ModelNoteUserFilterInput
+export const listNotas = /* GraphQL */ `
+  query ListNotas(
+    $filter: ModelNotasFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listNoteUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listNotas(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        noteID
+        titulo
+        subtitulo
         userID
         createdAt
         updatedAt
@@ -193,14 +117,14 @@ export const listNoteUsers = /* GraphQL */ `
     }
   }
 `;
-export const syncNoteUsers = /* GraphQL */ `
-  query SyncNoteUsers(
-    $filter: ModelNoteUserFilterInput
+export const syncNotas = /* GraphQL */ `
+  query SyncNotas(
+    $filter: ModelNotasFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncNoteUsers(
+    syncNotas(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -208,8 +132,73 @@ export const syncNoteUsers = /* GraphQL */ `
     ) {
       items {
         id
-        noteID
+        titulo
+        subtitulo
         userID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getNote = /* GraphQL */ `
+  query GetNote($id: ID!) {
+    getNote(id: $id) {
+      id
+      title
+      subtitle
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listNotes = /* GraphQL */ `
+  query ListNotes(
+    $filter: ModelNoteFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        subtitle
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNotes = /* GraphQL */ `
+  query SyncNotes(
+    $filter: ModelNoteFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncNotes(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        title
+        subtitle
         createdAt
         updatedAt
         _version
