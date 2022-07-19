@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 
 const ModalChangeName = ({ modal, switcho, switcher, submiting, data }) => {
   const [modalVisible, setModalVisible] = useState(modal);
-  const [name, setname] = useState(data?.getUser.name);
+  const [name, setname] = useState(data?.notasByUser.name);
 
   return (
     <View>

@@ -73,6 +73,7 @@ export const getNotas = /* GraphQL */ `
   query GetNotas($id: ID!) {
     getNotas(id: $id) {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -86,7 +87,6 @@ export const getNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -103,10 +103,10 @@ export const listNotas = /* GraphQL */ `
     listNotas(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        createdAt
         titulo
         subtitulo
         userID
-        createdAt
         updatedAt
         _version
         _deleted
@@ -132,10 +132,43 @@ export const syncNotas = /* GraphQL */ `
     ) {
       items {
         id
+        createdAt
         titulo
         subtitulo
         userID
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const notasByUser = /* GraphQL */ `
+  query NotasByUser(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelNotasFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    notasByUser(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
         createdAt
+        titulo
+        subtitulo
+        userID
         updatedAt
         _version
         _deleted

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { createNotas, getUser, updateNotas } from "./queries";
+import { createNotas, getUser, updateNotas, notasByUser } from "./queries";
 import { useQuery, useMutation } from "@apollo/client";
 import OnLoading from "../../components/OnLoading/OnLoading";
 import OnError from "../../components/OnError/OnError";
@@ -62,7 +62,9 @@ const RedactorScreen = ({ route }) => {
           route.params?.item.titulo == title &&
           route.params?.item.subtitulo == nota
             ? navigation.navigate("Home", { nota, title, key })
-            : [updating(), navigation.navigate("Home", { nota, title, key })]
+            : route.params?.item.id
+            ? [updating(), navigation.navigate("Home", { nota, title, key })]
+            : [saving(), navigation.navigate("Home", { nota, title, key })]
         }
       >
         <Text style={styles.butText}>Save</Text>

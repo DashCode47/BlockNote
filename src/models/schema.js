@@ -90,6 +90,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "titulo": {
                     "name": "titulo",
                     "isArray": false,
@@ -124,14 +131,6 @@ export const schema = {
                         "targetName": "userNotasId"
                     }
                 },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
                 "updatedAt": {
                     "name": "updatedAt",
                     "isArray": false,
@@ -152,8 +151,10 @@ export const schema = {
                     "type": "key",
                     "properties": {
                         "name": "byUser",
+                        "queryField": "notasByUser",
                         "fields": [
-                            "userID"
+                            "userID",
+                            "createdAt"
                         ]
                     }
                 },
@@ -244,5 +245,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "0ed827eb055e6cd23fddb8bcf6c850bf"
+    "version": "84644842c9ef10dcf8f040b2266cd330"
 };

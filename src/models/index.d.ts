@@ -9,7 +9,7 @@ type UserMetaData = {
 }
 
 type NotasMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
+  readOnlyFields: 'updatedAt';
 }
 
 type NoteMetaData = {
@@ -29,11 +29,11 @@ export declare class User {
 
 export declare class Notas {
   readonly id: string;
+  readonly createdAt: string;
   readonly titulo?: string | null;
   readonly subtitulo?: string | null;
   readonly userID: string;
   readonly User?: User | null;
-  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Notas, NotasMetaData>);
   static copyOf(source: Notas, mutator: (draft: MutableModel<Notas, NotasMetaData>) => MutableModel<Notas, NotasMetaData> | void): Notas;

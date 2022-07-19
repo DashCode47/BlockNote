@@ -71,6 +71,7 @@ export const createNotas = /* GraphQL */ `
   ) {
     createNotas(input: $input, condition: $condition) {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -84,7 +85,6 @@ export const createNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -99,6 +99,7 @@ export const updateNotas = /* GraphQL */ `
   ) {
     updateNotas(input: $input, condition: $condition) {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -112,7 +113,6 @@ export const updateNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -127,6 +127,7 @@ export const deleteNotas = /* GraphQL */ `
   ) {
     deleteNotas(input: $input, condition: $condition) {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -140,7 +141,6 @@ export const deleteNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted

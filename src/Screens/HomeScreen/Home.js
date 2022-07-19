@@ -18,7 +18,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Auth, Hub } from "aws-amplify";
-import { listUsers, getUser, deleteNotas } from "./queries";
+import { listUsers, getUser, deleteNotas, notasByUser } from "./queries";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import ModalChangeName from "./ModalChangeName";
 import { updateUser } from "./queries";
@@ -34,13 +34,23 @@ const Home = ({ route }) => {
   const { loading, error, data } = useQuery(listUsers);
 
   const {
+    loading: load3,
+    error: err3,
+    data: dtaUser,
+  } = useQuery(getUser, {
+    variables: { id: userId },
+  });
+
+  const {
     loading: load,
     error: err,
     data: dta,
     refetch,
-  } = useQuery(getUser, { variables: { id: userId } });
+  } = useQuery(notasByUser, {
+    variables: { userID: userId, sortDirection: "DESC" },
+  });
 
-  const notas = (dta?.getUser.Notas.items || []).filter(
+  const notas = (dta?.notasByUser.items || []).filter(
     (nota) => nota && !nota._deleted
   );
 
@@ -201,7 +211,7 @@ const Home = ({ route }) => {
         {/*   <TouchableOpacity onPress={console.warn(notas)}>
           <Text>Boton</Text>
         </TouchableOpacity> */}
-        <Text style={styles.boss}>Hi! {dta?.getUser.name}</Text>
+        <Text style={styles.boss}>Hi! {dtaUser?.getUser.name}</Text>
         <TouchableOpacity onPress={() => setswitcher(!switcher)}>
           <Text style={{ marginTop: 18 }}>
             <AntDesign name="edit" size={30} color="maroon" />

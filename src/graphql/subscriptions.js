@@ -59,6 +59,7 @@ export const onCreateNotas = /* GraphQL */ `
   subscription OnCreateNotas {
     onCreateNotas {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -72,7 +73,6 @@ export const onCreateNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -84,6 +84,7 @@ export const onUpdateNotas = /* GraphQL */ `
   subscription OnUpdateNotas {
     onUpdateNotas {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -97,7 +98,6 @@ export const onUpdateNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted
@@ -109,6 +109,7 @@ export const onDeleteNotas = /* GraphQL */ `
   subscription OnDeleteNotas {
     onDeleteNotas {
       id
+      createdAt
       titulo
       subtitulo
       userID
@@ -122,7 +123,6 @@ export const onDeleteNotas = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      createdAt
       updatedAt
       _version
       _deleted

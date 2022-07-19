@@ -104,6 +104,40 @@ export const getUser = gql`
   }
 `;
 
+export const notasByUser = gql`
+  query NotasByUser(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelNotasFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    notasByUser(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        createdAt
+        titulo
+        subtitulo
+        userID
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+
 export const listUsers = gql`
   query ListUsers(
     $filter: ModelUserFilterInput
