@@ -15,10 +15,10 @@ const Note = ({ item }) => {
       >
         <View style={styles.containerInner}>
           <Text style={styles.title} numberOfLines={2}>
-            {item.title}
+            {item.titulo}
           </Text>
           <Text style={styles.subtitle} numberOfLines={1}>
-            {item.nota}
+            {item.subtitulo}
           </Text>
         </View>
       </LinearGradient>

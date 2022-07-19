@@ -12,12 +12,6 @@ const ModalChangeName = ({ modal, switcho, switcher, submiting, data }) => {
   const [modalVisible, setModalVisible] = useState(modal);
   const [name, setname] = useState(data?.getUser.name);
 
-  /* useEffect(() => {
-    if (modal == true) {
-      return;
-    } else setModalVisible(true);
-  }, [modal]); */
-
   return (
     <View>
       <Modal

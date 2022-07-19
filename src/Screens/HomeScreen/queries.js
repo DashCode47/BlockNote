@@ -23,6 +23,20 @@ export const createNote = gql`
   }
 `;
 
+export const deleteNotas = gql`
+  mutation DeleteNotas(
+    $input: DeleteNotasInput!
+    $condition: ModelNotasConditionInput
+  ) {
+    deleteNotas(input: $input, condition: $condition) {
+      id
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+
 export const getNote = /* GraphQL */ `
   query GetNote($id: ID!) {
     getNote(id: $id) {
@@ -70,6 +84,17 @@ export const getUser = gql`
       id
       name
       username
+      Notas {
+        items {
+          id
+          titulo
+          subtitulo
+          _version
+          _deleted
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -78,6 +103,7 @@ export const getUser = gql`
     }
   }
 `;
+
 export const listUsers = gql`
   query ListUsers(
     $filter: ModelUserFilterInput

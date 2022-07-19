@@ -18,7 +18,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Auth, Hub } from "aws-amplify";
-import { listUsers, getUser } from "./queries";
+import { listUsers, getUser, deleteNotas } from "./queries";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import ModalChangeName from "./ModalChangeName";
 import { updateUser } from "./queries";
@@ -29,36 +29,6 @@ import { MyContext } from "../../Context/Context";
 
 const Home = ({ route }) => {
   const { userId } = useContext(MyContext);
-  /* =====================================getCOGNITO USER=============== */
-  /* const [user, setUser] = useState();
-  const userId = user?.attributes.sub;
-  const checkUser = async () => {
-    try {
-      const authUser = await Auth.currentAuthenticatedUser({
-        bypassCache: true,
-      });
-      setUser(authUser);
-    } catch (e) {
-      setUser(null);
-    }
-  };
-  useEffect(() => {
-    checkUser();
-  }, []);
-
-  useEffect(() => {
-    const listener = (data) => {
-      const { event } = data.payload;
-      if (event == "signOut") {
-        setUser(null);
-      }
-      if (event == "signIn") {
-        checkUser();
-      }
-    };
-    Hub.listen("auth", listener);
-    return () => Hub.remove("auth", listener);
-  }, []); */
 
   /* ============================QUERIES========================== */
   const { loading, error, data } = useQuery(listUsers);
@@ -67,14 +37,32 @@ const Home = ({ route }) => {
     loading: load,
     error: err,
     data: dta,
+    refetch,
   } = useQuery(getUser, { variables: { id: userId } });
+
+  const notas = (dta?.getUser.Notas.items || []).filter(
+    (nota) => nota && !nota._deleted
+  );
 
   const [doUpdateUser, { data: upData, loading: loadMut, error: errorMut }] =
     useMutation(updateUser);
 
-  const submiting = (id, name, version) => {
-    doUpdateUser({
+  const [doDeleteUser, { loading: loadDel, error: errorDel }] =
+    useMutation(deleteNotas);
+
+  const submiting = async (id, name, version) => {
+    const response = await doUpdateUser({
       variables: { input: { id: id, name: name, _version: version } },
+    });
+  };
+  const deletingNote = async (item) => {
+    const responseDelete = await doDeleteUser({
+      variables: {
+        input: {
+          id: item.id,
+          _version: item._version,
+        },
+      },
     });
   };
   /* =========================================================== */
@@ -155,6 +143,9 @@ const Home = ({ route }) => {
     closeRow(item.index);
   };
 
+  const deletingNotes = (item) => {
+    console.log(item.id);
+  };
   const closeRow = (index) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
@@ -173,7 +164,7 @@ const Home = ({ route }) => {
       >
         <Button
           color={"maroon"}
-          onPress={() => onDelete(item)}
+          onPress={() => deletingNote(item)}
           title={"DELETE"}
         ></Button>
       </View>
@@ -184,9 +175,16 @@ const Home = ({ route }) => {
     return <OnLoading />;
   }
 
-  if (error || errorMut || err) {
+  if (error || errorMut || err || errorDel) {
     return (
-      <OnError error={error?.message || errorMut?.message || err?.message} />
+      <OnError
+        error={
+          error?.message ||
+          errorMut?.message ||
+          err?.message ||
+          errorDel?.message
+        }
+      />
     );
   }
 
@@ -200,6 +198,9 @@ const Home = ({ route }) => {
           width: "100%",
         }}
       >
+        {/*   <TouchableOpacity onPress={console.warn(notas)}>
+          <Text>Boton</Text>
+        </TouchableOpacity> */}
         <Text style={styles.boss}>Hi! {dta?.getUser.name}</Text>
         <TouchableOpacity onPress={() => setswitcher(!switcher)}>
           <Text style={{ marginTop: 18 }}>
@@ -216,7 +217,7 @@ const Home = ({ route }) => {
       </View>
 
       <FlatList
-        data={values}
+        data={notas}
         renderItem={({ item, index }) => (
           <GestureHandlerRootView>
             <Swipeable
@@ -232,14 +233,18 @@ const Home = ({ route }) => {
           </GestureHandlerRootView>
         )}
         ListHeaderComponent={<SearchBar onSearch={onSearch} />}
+        onRefresh={refetch}
+        refreshing={loading}
       />
-      {values.length < 1 && (
+      {notas.length < 1 && (
         <Image
           style={styles.imageBG}
           source={require("../../../assets/images/alone.png")}
         />
       )}
-      <Text>{userId}</Text>
+      <Text style={{ alignSelf: "flex-end", marginRight: 15 }}>
+        BlockNote 1.0
+      </Text>
       <TouchableOpacity
         style={styles.plus}
         onPress={() => navigation.navigate("Redactor")}

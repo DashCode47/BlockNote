@@ -5,10 +5,11 @@ import {
   StatusBar,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { createNote, getUser } from "./queries";
+import { createNotas, getUser, updateNotas } from "./queries";
 import { useQuery, useMutation } from "@apollo/client";
 import OnLoading from "../../components/OnLoading/OnLoading";
 import OnError from "../../components/OnError/OnError";
@@ -16,24 +17,53 @@ import { MyContext } from "../../Context/Context";
 
 const RedactorScreen = ({ route }) => {
   const { userId } = useContext(MyContext);
-  const [nota, setnota] = useState(route.params?.item.nota);
-  const [title, settitle] = useState(route.params?.item.title);
+  const [nota, setnota] = useState(route.params?.item.subtitulo);
+  const [title, settitle] = useState(route.params?.item.titulo);
   const key = route.params?.item.key;
   const navigation = useNavigation();
-
-  const [OncreateNote, { data, loading, error }] = useMutation(createNote);
-  const saving = (id, name, version) => {
-    OncreateNote({
-      variables: { input: { id: id, name: name, _version: version } },
+  /* ==============================================USE MUTATION/UPDATE========================================= */
+  const [doUpdateNote, { data: upData, loading: loadMut, error: errorMut }] =
+    useMutation(updateNotas);
+  const updating = async () => {
+    const response = await doUpdateNote({
+      variables: {
+        input: {
+          id: route.params?.item.id,
+          titulo: title,
+          subtitulo: nota,
+          _version: route.params?.item._version,
+        },
+      },
     });
   };
 
+  const [OncreateNote, { data, loading, error }] = useMutation(createNotas);
+  const saving = async () => {
+    try {
+      const response = await OncreateNote({
+        variables: {
+          input: {
+            userID: userId,
+            titulo: title,
+            subtitulo: nota,
+          },
+        },
+      });
+    } catch (e) {
+      Alert.alert("Error uploading", e.message);
+    }
+  };
+  /* ====================================================================*/
   return (
     <View style={styles.container}>
-      <Text>{userId}</Text>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate("Home", { nota, title, key })}
+        onPress={() =>
+          route.params?.item.titulo == title &&
+          route.params?.item.subtitulo == nota
+            ? navigation.navigate("Home", { nota, title, key })
+            : [updating(), navigation.navigate("Home", { nota, title, key })]
+        }
       >
         <Text style={styles.butText}>Save</Text>
       </Pressable>

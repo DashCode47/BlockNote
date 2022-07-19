@@ -1,16 +1,24 @@
 import { gql } from "@apollo/client";
-export const createNote = gql`
-  mutation CreateNote(
-    $input: CreateNoteInput!
-    $condition: ModelNoteConditionInput
+
+export const createNotas = gql`
+  mutation CreateNotas(
+    $input: CreateNotasInput!
+    $condition: ModelNotasConditionInput
   ) {
-    createNote(input: $input, condition: $condition) {
+    createNotas(input: $input, condition: $condition) {
       id
-      title
-      subtitle
-      Users {
-        nextToken
-        startedAt
+      titulo
+      subtitulo
+      userID
+      User {
+        id
+        name
+        username
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
@@ -20,6 +28,22 @@ export const createNote = gql`
     }
   }
 `;
+export const updateNotas = gql`
+  mutation UpdateNotas(
+    $input: UpdateNotasInput!
+    $condition: ModelNotasConditionInput
+  ) {
+    updateNotas(input: $input, condition: $condition) {
+      id
+      titulo
+      subtitulo
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+
 export const getUser = gql`
   query GetUser($id: ID!) {
     getUser(id: $id) {
