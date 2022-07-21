@@ -9,17 +9,16 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { createNotas, getUser, updateNotas, notasByUser } from "./queries";
+import { createNotas, updateNotas } from "./queries";
 import { useQuery, useMutation } from "@apollo/client";
-import OnLoading from "../../components/OnLoading/OnLoading";
-import OnError from "../../components/OnError/OnError";
+
 import { MyContext } from "../../Context/Context";
 
 const RedactorScreen = ({ route }) => {
   const { userId } = useContext(MyContext);
   const [nota, setnota] = useState(route.params?.item.subtitulo);
   const [title, settitle] = useState(route.params?.item.titulo);
-  const key = route.params?.item.key;
+  const key = route.params?.item.id;
   const navigation = useNavigation();
   /* ==============================================USE MUTATION/UPDATE========================================= */
   const [doUpdateNote, { data: upData, loading: loadMut, error: errorMut }] =
@@ -63,8 +62,8 @@ const RedactorScreen = ({ route }) => {
           route.params?.item.subtitulo == nota
             ? navigation.navigate("Home", { nota, title, key })
             : route.params?.item.id
-            ? [updating(), navigation.navigate("Home", { nota, title, key })]
-            : [saving(), navigation.navigate("Home", { nota, title, key })]
+            ? [updating(), navigation.navigate("Home")]
+            : [saving(), navigation.navigate("Home")]
         }
       >
         <Text style={styles.butText}>Save</Text>

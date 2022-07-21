@@ -27,7 +27,7 @@ import OnLoading from "../../components/OnLoading/OnLoading";
 import OnError from "../../components/OnError/OnError";
 import { MyContext } from "../../Context/Context";
 
-const Home = ({ route }) => {
+const Home = () => {
   const { userId } = useContext(MyContext);
 
   /* ============================QUERIES========================== */
@@ -53,12 +53,12 @@ const Home = ({ route }) => {
   const notas = (dta?.notasByUser.items || []).filter(
     (nota) => nota && !nota._deleted
   );
+  const [notasFilter, setnotasFilter] = useState(notas);
 
-  const [doUpdateUser, { data: upData, loading: loadMut, error: errorMut }] =
+  const [doUpdateUser, { loading: loadMut, error: errorMut }] =
     useMutation(updateUser);
 
-  const [doDeleteUser, { loading: loadDel, error: errorDel }] =
-    useMutation(deleteNotas);
+  const [doDeleteUser, { error: errorDel }] = useMutation(deleteNotas);
 
   const submiting = async (id, name, version) => {
     const response = await doUpdateUser({
@@ -77,26 +77,20 @@ const Home = ({ route }) => {
   };
   /* =========================================================== */
   const navigation = useNavigation();
-  const nota = route.params?.nota;
-  const title = route.params?.title;
-  let key = route.params?.key;
+
   let row = [];
   let prevOpenedRow;
-  const [image, setimage] = useState(true);
-  const [values, setvalues] = useState([]);
-  const [search, setsearch] = useState([]);
   const [modal, setmodal] = useState(false);
-
-  const updated = {
-    title,
-    nota,
-    key: Math.random().toString(),
-  };
 
   const [switcher, setswitcher] = useState(false);
   const switcho = (val) => {
     setswitcher(!val);
   };
+
+  useEffect(() => {
+    setnotasFilter(notas);
+  }, [dta]);
+
   /*  const saveData = async () => {
     await AsyncStorage.setItem("notas", JSON.stringify(values));
     await AsyncStorage.setItem("search", JSON.stringify(search));
@@ -121,7 +115,7 @@ const Home = ({ route }) => {
     saveData();
   }, [values, search]); */
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (nota || title) {
       if (key) {
         setvalues(values.map((item) => (item.key === key ? updated : item)));
@@ -132,30 +126,21 @@ const Home = ({ route }) => {
         setsearch((prev) => [...prev, updated]);
       }
     }
-  }, [route.params]);
+  }, [route.params]); */
 
   const onSearch = (value) => {
-    if (!value.length) return setvalues(search);
-    const filterData = values.filter((item) =>
-      item.title.toLowerCase().includes(value.toLowerCase())
+    if (!value.length) return setnotasFilter(notas);
+    const filterData = notas.filter((item) =>
+      item.titulo.toLowerCase().includes(value.toLowerCase())
     );
 
     if (filterData.length) {
-      setvalues(filterData);
+      setnotasFilter(filterData);
     } else {
-      setvalues(search);
+      setnotasFilter([]);
     }
   };
 
-  const onDelete = async (item) => {
-    setvalues(values.filter((datas) => datas !== item));
-    setsearch(values.filter((datas) => datas !== item));
-    closeRow(item.index);
-  };
-
-  const deletingNotes = (item) => {
-    console.log(item.id);
-  };
   const closeRow = (index) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
@@ -208,9 +193,6 @@ const Home = ({ route }) => {
           width: "100%",
         }}
       >
-        {/*   <TouchableOpacity onPress={console.warn(notas)}>
-          <Text>Boton</Text>
-        </TouchableOpacity> */}
         <Text style={styles.boss}>Hi! {dtaUser?.getUser.name}</Text>
         <TouchableOpacity onPress={() => setswitcher(!switcher)}>
           <Text style={{ marginTop: 18 }}>
@@ -220,14 +202,14 @@ const Home = ({ route }) => {
         <ModalChangeName
           modal={modal}
           submiting={submiting}
-          data={dta}
+          data={dtaUser}
           switcho={switcho}
           switcher={switcher}
         />
       </View>
 
       <FlatList
-        data={notas}
+        data={notasFilter}
         renderItem={({ item, index }) => (
           <GestureHandlerRootView>
             <Swipeable

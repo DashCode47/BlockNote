@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 
 const ModalChangeName = ({ modal, switcho, switcher, submiting, data }) => {
   const [modalVisible, setModalVisible] = useState(modal);
-  const [name, setname] = useState(data?.notasByUser.name);
+  const [name, setname] = useState(data?.getUser.name);
 
   return (
     <View>
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     height: 170,
     aspectRatio: 1 / 1,
     backgroundColor: "white",
-    /* justifyContent: "center", */
     alignItems: "center",
     borderRadius: 40,
     borderWidth: 0.5,
